@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Gilded Hour — Museum Heist</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #070b16; }
+  body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .frame {
+    padding: 18px;
+    background: linear-gradient(160deg, #101a30, #0a0f1e);
+    border: 1px solid #3a2f1d;
+    box-shadow: 0 0 60px rgba(0, 0, 0, .8), inset 0 0 40px rgba(212, 175, 55, .06);
+  }
+  canvas {
+    display: block;
+    width: min(1280px, 96vw);
+    height: auto;
+    background: #0b1224;
+    border: 1px solid #2a2118;
+  }
+  .hint {
+    color: #8d9bb5;
+    font-size: 13px;
+    text-align: center;
+    margin: 10px 0 0;
+    font-family: system-ui, sans-serif;
+  }
+  .hint b { color: #d4af37; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <canvas id="game" width="1280" height="720"></canvas>
+  <p class="hint">WASD / panah bergerak &nbsp;·&nbsp; <b>Space</b> pakai tool &nbsp;·&nbsp; <b>1/2/3</b> pilih tool &nbsp;·&nbsp; <b>Shift</b> jalan pelan</p>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
