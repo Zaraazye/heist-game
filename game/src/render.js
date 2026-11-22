@@ -56,7 +56,7 @@ function rr(ctx, x, y, w, h, r) {
 
 function panel(ctx, x, y, w, h) {
   rr(ctx, x, y, w, h, 8);
-  ctx.fillStyle = 'rgba(6, 10, 22, 0.78)';
+  ctx.fillStyle = 'rgba(6, 10, 22, 0.94)';
   ctx.fill();
   ctx.strokeStyle = 'rgba(212, 175, 55, 0.35)';
   ctx.lineWidth = 1;
@@ -171,7 +171,9 @@ function drawDoors(ctx, world) {
   ctx.fillStyle = '#9be8bd';
   ctx.font = 'bold 11px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText('MASUK', e.x, e.y + 4);
+  // Label di tepi atas alas (bukan di tengah): thief spawn tepat di
+  // tengah alas MASUK dan menutupi label bila label di tengah.
+  ctx.fillText('MASUK', e.x, e.y - 20);
   // Pintu darurat (kanan bawah) — alas hijau menyala.
   const x = world.exit;
   ctx.save();
@@ -610,8 +612,11 @@ function drawHUD(ctx, world, selectedTool) {
   ctx.fillRect(640 - mw / 2 - 10, 632, mw + 20, 24);
   ctx.fillStyle = msg === 'SPOTTED!' ? '#ff6b61' : COLORS.text;
   ctx.fillText(msg || 'Curi Berlian Gilded, lalu kabur lewat pintu darurat!', 640, 649);
-  // Peringatan SPOTTED besar di tengah layar.
-  if (world.spotted) {
+  // Peringatan SPOTTED besar di tengah layar — hanya saat bermain.
+  // Di layar akhir (caught/victory) panel end sudah menulis SPOTTED /
+  // KABUR!; menggambarnya di bawah panel semi-transparan membuat
+  // bayangannya tembus terlihat di balik panel.
+  if (world.spotted && world.state === 'play') {
     ctx.save();
     ctx.globalAlpha = 0.65 + 0.35 * Math.sin(time * 6);
     ctx.fillStyle = '#ff3b30';
@@ -665,9 +670,9 @@ function drawTitle(ctx, world) {
     ['3', 'GHOST'],
   ];
   diffs.forEach(([key, label], i) => {
-    const x = 490 + i * 100;
+    const x = 464 + i * 120;
     const active = (world.difficulty || 'professional') === label.toLowerCase();
-    rr(ctx, x, 470, 92, 34, 6);
+    rr(ctx, x, 470, 112, 34, 6);
     ctx.fillStyle = active ? COLORS.gold : 'rgba(6, 10, 22, 0.6)';
     ctx.fill();
     ctx.strokeStyle = active ? COLORS.goldBright : 'rgba(154, 167, 199, 0.5)';
@@ -675,7 +680,7 @@ function drawTitle(ctx, world) {
     ctx.stroke();
     ctx.fillStyle = active ? '#0a0f1e' : COLORS.text;
     ctx.font = 'bold 12px Georgia, serif';
-    ctx.fillText(key + ' ' + label, x + 46, 491);
+    ctx.fillText(key + ' ' + label, x + 56, 491);
   });
   ctx.save();
   ctx.globalAlpha = 0.7 + 0.3 * Math.sin((world.time || 0) * 3 + 1);
@@ -730,7 +735,12 @@ function drawEnd(ctx, world, won) {
   drawStatsRows(ctx, world, 286);
   const grade = world.stats.grade || gradeFor(world);
   ctx.fillStyle = grade === 'S' ? COLORS.goldBright : grade === 'A' ? '#37d67a' : grade === 'B' ? '#7fb2ff' : '#9aa7c7';
-  ctx.font = 'bold 84px Georgia, serif';
+  // drawStatsRows meninggalkan textAlign='right'; tanpa reset ke
+  // 'center', teks GRADE berakhir di x=640 dan meluber ke kiri panel.
+  // Font juga dikecilkan (84 -> 64px) supaya "GRADE C/S" muat di panel
+  // 600px dengan margin di kedua sisi.
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 64px Georgia, serif';
   ctx.fillText('GRADE ' + grade, 640, 520);
   ctx.save();
   ctx.globalAlpha = 0.7 + 0.3 * Math.sin((world.time || 0) * 3 + 1);

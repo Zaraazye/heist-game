@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Gilded Hour — Museum Heist</title>
+<link rel="icon" href="data:,">
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: #070b16; }
+  html, body { margin: 0; padding: 0; overflow: hidden; height: 100%; background: #070b16; }
   body {
     min-height: 100vh;
     display: grid;
@@ -15,24 +16,22 @@
     font-family: Georgia, 'Times New Roman', serif;
   }
   .frame {
-    padding: 18px;
-    background: linear-gradient(160deg, #101a30, #0a0f1e);
-    border: 1px solid #3a2f1d;
-    box-shadow: 0 0 60px rgba(0, 0, 0, .8), inset 0 0 40px rgba(212, 175, 55, .06);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
   }
   canvas {
     display: block;
-    width: min(1280px, 96vw);
-    height: auto;
+    width: 1280px;
+    height: 720px;
+    max-width: 100vw;
+    max-height: 100vh;
     background: #0b1224;
-    border: 1px solid #2a2118;
+    border: 0;
   }
   .hint {
-    color: #8d9bb5;
-    font-size: 13px;
-    text-align: center;
-    margin: 10px 0 0;
-    font-family: system-ui, sans-serif;
+    display: none;
   }
   .hint b { color: #d4af37; }
 </style>
